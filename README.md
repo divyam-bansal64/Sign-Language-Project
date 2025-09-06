@@ -1,70 +1,73 @@
-# Getting Started with Create React App
+# Advanced Sign Language Converter
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An AI-powered dual-channel application that converts between **speech/text ↔ sign language**.  
+The project integrates **Natural Language Processing (NLP)**, **speech recognition**, and **gesture detection** to make communication more inclusive for people using sign language.
 
-## Available Scripts
+Co-developed by **Divyam Bansal**, **Hitesh Khowal**, and **Hirday Singh**.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Speech to Sign Language**  
+  Convert spoken input into sign language using browser-based speech recognition.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Text to Sign Language**  
+  Type or paste text and get corresponding sign language output with NLP-based simplification.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **NLP Processing**  
+  Uses advanced Natural Language Processing (Compromise.js + custom preprocessing) to analyze input, extract key words, and map them to sign resources.
 
-### `npm test`
+- **Sign Language Detection (Webcam)**  
+  Real-time gesture recognition using a CNN-based model integrated with **MediaPipe Tasks Vision**.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Fuzzy Matching with CSV Database**  
+  Smart matching of phrases and words (via Fuse.js and PapaParse) to handle typos, synonyms, and approximate matches.
 
-### `npm run build`
+## Tech Stack
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Core Framework
+- **React** – Frontend framework for building the user interface.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Natural Language Processing (NLP)
+- **Compromise.js** – Extracts nouns, verbs, adjectives, and sentence structures.
+- **Custom Preprocessing** – Simplifies input text into sign-language-ready words.
+- **Fuse.js** – Fuzzy matching for approximate word/phrase recognition.
+- **PapaParse** – Parses CSV files (`words.csv`, `phrases.csv`) to map text with sign videos/images.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Speech Recognition
+- **react-speech-recognition** – Converts spoken voice input into text using browser APIs.
 
-### `npm run eject`
+### Gesture & Vision AI
+- **react-webcam** – Integrates webcam feed for real-time gesture detection.
+- **MediaPipe Tasks Vision** – Runs the gesture recognition model (GPU/CPU) to detect sign language gestures.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Usage
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The application works in two main modes:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 1. Speech / Text → Sign Language
+- **Speech Input**: Click the microphone button, speak, and your speech is transcribed into text.
+- **Text Input**: Type or paste any sentence into the text box.
+- The text is processed through **NLP** (Compromise.js + custom preprocessing).
+- Matching signs are fetched from:
+  - **Phrases database** (CSV + video files).
+  - **Words database** (CSV + image files).
+- Output is shown as **sign language videos or images**.
 
-## Learn More
+### 2. Sign Language (Webcam) → Text
+- Enable your **webcam** by clicking *Start Detection*.
+- The app uses **MediaPipe AI** to detect gestures in real time.
+- Recognized signs are displayed as text with **confidence scores**.
+- A history of recent detections is shown for reference.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contributors
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+This project was **co-developed** by:
 
-### Code Splitting
+- **Divyam Bansal**
+- **Hitesh Khowal**
+- **Hirday Singh**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Special thanks to open-source libraries and models that made this project possible.
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
