@@ -326,26 +326,34 @@ const processTextWithNLP = (text) => {
   // Text to sign language conversion
 const handleTextToSign = () => {
   setLoading(true);
-  
+
   setTimeout(() => {
     const input = textInput.trim().toLowerCase();
-    
-    // Process with NLP first
-    const nlpResult = processTextWithNLP(input);
-    setNlpAnalysis(nlpResult.analysis);
-    setProcessedText(nlpResult.simplified);
-    
+
+    // Run NLP processing
+    const nlpResult = preprocessTextForSignLanguage(input);
+    const { simplified, originalTokens } = nlpResult;
+
+    // Store analysis for UI display
+    setNlpAnalysis({
+      simplified,
+      originalTokens
+    });
+    setProcessedText(simplified.join(" "));
+
     let signs = [];
 
-    // Try exact phrase match first
+    // --- 1. Try exact phrase match (using original input) ---
     if (phraseMap[input]) {
+      const filename = phraseMap[input];
       signs = [{
         type: "phrase",
         key: input,
-        src: `${process.env.PUBLIC_URL}/videos/phrases/${phraseMap[input]}`
+        src: `${process.env.PUBLIC_URL}/videos/phrases/${filename}`
       }];
     }
-    // Fuzzy phrase match
+
+    // --- 2. Fuzzy phrase match ---
     else if (fusePhrases) {
       const phraseResults = fusePhrases.search(input);
       if (phraseResults.length > 0 && phraseResults[0].score < 0.4) {
@@ -357,27 +365,26 @@ const handleTextToSign = () => {
         }];
       }
     }
-    
-    // Fallback to word-by-word mapping using NLP processed text
+
+    // --- 3. Word-by-word fallback (use originalTokens for matching) ---
     if (signs.length === 0 && fuseWords) {
-      const words = nlpResult.signLanguageReady;
-      signs = words.map(word => {
+      signs = originalTokens.map(word => {
         let src = null;
         let key = word;
-        
-        // Exact match - USE IMAGES/WORDS PATH FOR JPG FILES
+
+        // Exact match
         if (wordMap[word]) {
           src = `${process.env.PUBLIC_URL}/images/words/${wordMap[word]}`;
         }
         // Fuzzy match
-        else if (fuseWords) {
+        else {
           const wordResults = fuseWords.search(word);
           if (wordResults.length > 0 && wordResults[0].score < 0.5) {
             key = wordResults[0].item;
             src = `${process.env.PUBLIC_URL}/images/words/${wordMap[key]}`;
           }
         }
-        
+
         return {
           type: "word",
           key,
@@ -386,11 +393,13 @@ const handleTextToSign = () => {
         };
       });
     }
-    
+
+    // --- 4. Save output signs ---
     setConvertedSigns(signs);
     setLoading(false);
   }, 800);
 };
+
 
 
 
@@ -883,3 +892,4 @@ const handleTextToSign = () => {
     </>
   );
 }
+
